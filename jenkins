@@ -18,7 +18,7 @@ pipeline{
                     sshagent(['SSH_Tomcat']) {
                                         
                         sh """
-                            scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/Maven-Project/webapp/target/webapp.war ec2-user@172.31.45.90:/opt/tomcat9/webapps/
+                            scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/tomcat-root-war/webapp/target/webapp.war ec2-user@172.31.45.90:/opt/tomcat9/webapps/
                     
                             ssh ec2-user@172.31.45.90 /opt/tomcat9/bin/shutdown.sh
                     
