@@ -1,0 +1,34 @@
+pipeline{
+    agent any
+   
+     stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'Nishad', url: 'https://github.com/Nishadgithub/hello-world-tomcat-war.git'
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean package"
+                //sh "mv target/*.war target/myweb.war"
+            }
+        }
+       stage("Deploy"){
+            steps{
+                    sshagent(['SSH_Tomcat']) {
+                                        
+                        sh """
+                            scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/Maven-Project/webapp/target/webapp.war ec2-user@172.31.45.90:/opt/tomcat9/webapps/
+                    
+                            ssh ec2-user@172.31.45.90 /opt/tomcat9/bin/shutdown.sh
+                    
+                            ssh ec2-user@172.31.45.90 /opt/tomcat9/bin/startup.sh
+                
+                """
+                }
+            }
+
+       }
+        
+    }
+}
